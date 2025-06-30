@@ -1,0 +1,523 @@
+<!DOCTYPE html>
+<html lang="nl">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Simple FAQ Component</title>
+    <style>
+      /* Reset and base styles */
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
+
+      html,
+      body {
+        height: auto !important;
+        min-height: auto !important;
+        overflow: visible !important;
+        font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+      }
+
+      body {
+        background: white;
+        padding: 0;
+        margin: 0;
+      }
+
+      .svea-faq-component {
+        --primary-color: #0056b3;
+        --primary-hover: #003d82;
+        --text: #333;
+        --text-light: #4a5568;
+        --border: #e2e8f0;
+        --transition: all 0.3s ease;
+
+        background: white;
+        color: var(--text);
+        line-height: 1.6;
+        padding: 40px 20px;
+        width: 100%;
+        height: auto !important;
+        min-height: auto !important;
+        overflow: visible !important;
+      }
+
+      .svea-faq-container {
+        max-width: 1200px;
+        margin: 0 auto;
+        padding: 0;
+        height: auto !important;
+        min-height: auto !important;
+      }
+
+      .svea-faq-header {
+        text-align: center;
+        margin-bottom: 50px;
+      }
+
+      .svea-faq-title {
+        font-size: 2.5rem;
+        color: var(--primary-color);
+        margin-bottom: 15px;
+        font-weight: 600;
+      }
+
+      .svea-faq-grid {
+        display: grid;
+        grid-template-columns: 1fr;
+        gap: 0;
+        height: auto !important;
+        min-height: auto !important;
+      }
+
+      @media (min-width: 768px) {
+        .svea-faq-grid {
+          grid-template-columns: repeat(2, 1fr);
+          gap: 60px;
+        }
+      }
+
+      .svea-faq-accordion {
+        background: transparent;
+        border: none;
+        overflow: visible !important;
+        margin-bottom: 0;
+        transition: none;
+        height: auto !important;
+        min-height: auto !important;
+        border-bottom: 1px solid var(--border);
+        padding-bottom: 20px;
+        margin-bottom: 30px;
+      }
+
+      .svea-faq-accordion:hover {
+        box-shadow: none;
+        transform: none;
+      }
+
+      .svea-faq-header-btn {
+        padding: 0;
+        cursor: pointer;
+        display: flex;
+        justify-content: space-between;
+        align-items: flex-start;
+        font-weight: 500;
+        color: var(--text);
+        background: transparent;
+        transition: color 0.3s;
+        width: 100%;
+        text-align: left;
+        border: none;
+        font-size: 18px;
+        line-height: 1.4;
+        margin-bottom: 15px;
+      }
+
+      .svea-faq-header-btn:hover {
+        background: transparent;
+        color: var(--primary-color);
+      }
+
+      .svea-faq-header-btn.active {
+        background: transparent;
+        color: var(--primary-color);
+      }
+
+      .svea-faq-header-btn span {
+        flex: 1;
+        padding-right: 20px;
+      }
+
+      .svea-faq-icon {
+        transition: transform 0.3s ease;
+        color: var(--text-light);
+        font-size: 1.2rem;
+        min-width: 24px;
+        min-height: 24px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        flex-shrink: 0;
+      }
+
+      .svea-faq-header-btn.active .svea-faq-icon {
+        transform: rotate(180deg);
+        color: var(--primary-color);
+      }
+
+      .svea-faq-content {
+        padding: 0;
+        height: 0;
+        overflow: hidden;
+        transition: height 0.3s ease, padding 0.3s ease;
+        background: transparent;
+      }
+
+      .svea-faq-content.show {
+        padding: 0;
+        height: auto !important;
+        overflow: visible !important;
+      }
+
+      .svea-faq-content-inner {
+        padding: 0;
+      }
+
+      .svea-faq-content p {
+        margin-bottom: 15px;
+        color: var(--text-light);
+        font-size: 16px;
+        line-height: 1.6;
+      }
+
+      .svea-faq-content ul {
+        padding-left: 20px;
+        margin: 15px 0;
+      }
+
+      .svea-faq-content li {
+        margin-bottom: 10px;
+        color: var(--text-light);
+      }
+
+      .svea-faq-content a {
+        color: var(--primary-color);
+        text-decoration: none;
+        font-weight: 500;
+        transition: color 0.2s;
+      }
+
+      .svea-faq-content a:hover {
+        color: var(--primary-hover);
+        text-decoration: underline;
+      }
+
+      /* Mobile adjustments */
+      @media (max-width: 767px) {
+        .svea-faq-title {
+          font-size: 2rem;
+        }
+
+        .svea-faq-header-btn {
+          font-size: 16px;
+        }
+
+        .svea-faq-component {
+          padding: 20px 15px;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <div class="svea-faq-component">
+      <div class="svea-faq-container">
+        <div class="svea-faq-header">
+          <h2 class="svea-faq-title">Direct antwoord op jouw vragen</h2>
+        </div>
+
+        <div class="svea-faq-grid">
+          <!-- Left Column -->
+          <div>
+            <div class="svea-faq-accordion">
+              <button class="svea-faq-header-btn" data-faq="1">
+                <span>Wat is factoring?</span>
+                <div class="svea-faq-icon">
+                  <svg width="20" height="20" viewBox="0 0 24 24">
+                    <path
+                      fill="currentColor"
+                      d="M7.41,8.58L12,13.17L16.59,8.58L18,10L12,16L6,10L7.41,8.58Z"
+                    />
+                  </svg>
+                </div>
+              </button>
+              <div class="svea-faq-content" id="faq-content-1">
+                <div class="svea-faq-content-inner">
+                  <p>
+                    <a href="#" rel="noopener">Factoring</a> is een zakelijke
+                    financieringsvorm op basis van debiteuren. Je verkoopt je
+                    facturen aan een factoringbedrijf als Svea en ontvangt
+                    direct je geld. Vervolgens wachten wij op de betaling van je
+                    opdrachtgever. Daarmee is Svea
+                    <a href="#" rel="noopener">dé cashflowversneller</a> voor
+                    ondernemend Nederland. Want onze hybride factoring methode
+                    heft meteen de beperkingen van je rekening-courant op.
+                  </p>
+                  <p>
+                    De 3-in-1 cashflowversneller van Svea biedt je de volgende
+                    voordelen:
+                  </p>
+                  <ul>
+                    <li>
+                      <p>
+                        <strong>Facturen direct betaald:</strong> voor 12.00 uur
+                        ingediend? Vandaag betaald.
+                      </p>
+                    </li>
+                    <li>
+                      <p>
+                        <strong>Op tijd debiteuren beheerd:</strong> direct
+                        extra slagkracht, want wij nemen het debiteurenbeheer
+                        over.
+                      </p>
+                    </li>
+                    <li>
+                      <p>
+                        <strong>100% verzekerd van je geld:</strong> je
+                        werkkapitaal is beschermd, want wij dragen het
+                        kredietrisico.
+                      </p>
+                    </li>
+                  </ul>
+                </div>
+              </div>
+            </div>
+
+            <div class="svea-faq-accordion">
+              <button class="svea-faq-header-btn" data-faq="2">
+                <span>Hoe lever ik mijn facturen aan bij Svea?</span>
+                <div class="svea-faq-icon">
+                  <svg width="20" height="20" viewBox="0 0 24 24">
+                    <path
+                      fill="currentColor"
+                      d="M7.41,8.58L12,13.17L16.59,8.58L18,10L12,16L6,10L7.41,8.58Z"
+                    />
+                  </svg>
+                </div>
+              </button>
+              <div class="svea-faq-content" id="faq-content-2">
+                <div class="svea-faq-content-inner">
+                  <p>
+                    Lever je facturen eenvoudig bij ons aan via e-mail, onze
+                    online portal, API of SFTP (bestandsoverdracht door
+                    computers te verbinden). Facturen versturen per post of
+                    persoonlijk afgeven mag natuurlijk ook!
+                  </p>
+                  <p>
+                    Voeg daarnaast bijlagen, zoals een werkbon of urenstaat, toe
+                    aan de facturen die je bij ons indient. Na aankoop van de
+                    factuur, ontvang jij direct je geld.
+                  </p>
+                </div>
+              </div>
+            </div>
+
+            <div class="svea-faq-accordion">
+              <button class="svea-faq-header-btn" data-faq="3">
+                <span>Welke gegevens moet ik aanleveren?</span>
+                <div class="svea-faq-icon">
+                  <svg width="20" height="20" viewBox="0 0 24 24">
+                    <path
+                      fill="currentColor"
+                      d="M7.41,8.58L12,13.17L16.59,8.58L18,10L12,16L6,10L7.41,8.58Z"
+                    />
+                  </svg>
+                </div>
+              </button>
+              <div class="svea-faq-content" id="faq-content-3">
+                <div class="svea-faq-content-inner">
+                  <p>
+                    Voor jouw aanvraag hebben we slechts een aantal gegevens
+                    nodig. Beginnen is simpel!
+                  </p>
+                  <p>
+                    Je deelt eerst alleen je contactgegevens. Zo kunnen we
+                    vrijblijvend kennismaken. Vertel ons wat meer over jouw
+                    bedrijf en je opdrachtgevers.
+                  </p>
+                  <p>
+                    Is er een wederzijdse match? Deel dan een geldig
+                    legitimatiebewijs en je bankrekeningnummer. En stuur ons
+                    indien van toepassing: de gegevens van UBO's, een
+                    debiteuren- en crediteurenoverzicht en de meest recente
+                    jaarcijfers.
+                  </p>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Right Column -->
+          <div>
+            <div class="svea-faq-accordion">
+              <button class="svea-faq-header-btn" data-faq="4">
+                <span>Wat kost factoring?</span>
+                <div class="svea-faq-icon">
+                  <svg width="20" height="20" viewBox="0 0 24 24">
+                    <path
+                      fill="currentColor"
+                      d="M7.41,8.58L12,13.17L16.59,8.58L18,10L12,16L6,10L7.41,8.58Z"
+                    />
+                  </svg>
+                </div>
+              </button>
+              <div class="svea-faq-content" id="faq-content-4">
+                <div class="svea-faq-content-inner">
+                  <p>
+                    Svea baseert de
+                    <a href="#" rel="noopener">factoring kosten</a>
+                    als percentage over het factuurbedrag. Onze tarieven
+                    beginnen bij 2% per factuur. Daar krijg jij onze 3-in-1
+                    cashflowversneller voor terug.
+                  </p>
+                  <p>
+                    Het exacte kostenpercentage hangt af van het aantal
+                    facturen, de betalingstermijn van je opdrachtgever en zijn
+                    kredietwaardigheid.
+                  </p>
+                  <p>
+                    Svea betaalt na aankoop het volledige factuurbedrag min deze
+                    kosten direct uit. Uiteraard voor een afgesproken vaste
+                    prijs.
+                  </p>
+                </div>
+              </div>
+            </div>
+
+            <div class="svea-faq-accordion">
+              <button class="svea-faq-header-btn" data-faq="5">
+                <span>Hoe weet ik of mijn opdrachtgever voldoet?</span>
+                <div class="svea-faq-icon">
+                  <svg width="20" height="20" viewBox="0 0 24 24">
+                    <path
+                      fill="currentColor"
+                      d="M7.41,8.58L12,13.17L16.59,8.58L18,10L12,16L6,10L7.41,8.58Z"
+                    />
+                  </svg>
+                </div>
+              </button>
+              <div class="svea-faq-content" id="faq-content-5">
+                <div class="svea-faq-content-inner">
+                  <p>
+                    Voordat je de facturen van een opdrachtgever bij ons kunt
+                    indienen, voeren wij een kredietwaardigheidsonderzoek uit
+                    (ook wel <a href="#" rel="noopener">creditcheck</a>).
+                  </p>
+                  <p>
+                    Want bij de acceptatie van factoring kijken we naar jouw
+                    cijfers, maar staat de kredietwaardigheid van je
+                    opdrachtgever voorop. Is hij voldoende kredietwaardig? Dan
+                    geven we een kredietlimiet af: het maximaal openstaande
+                    bedrag per debiteur.
+                  </p>
+                </div>
+              </div>
+            </div>
+
+            <div class="svea-faq-accordion">
+              <button class="svea-faq-header-btn" data-faq="6">
+                <span>Hoe kan ik volgen wat er gebeurt met mijn facturen?</span>
+                <div class="svea-faq-icon">
+                  <svg width="20" height="20" viewBox="0 0 24 24">
+                    <path
+                      fill="currentColor"
+                      d="M7.41,8.58L12,13.17L16.59,8.58L18,10L12,16L6,10L7.41,8.58Z"
+                    />
+                  </svg>
+                </div>
+              </button>
+              <div class="svea-faq-content" id="faq-content-6">
+                <div class="svea-faq-content-inner">
+                  <p>
+                    Met de cashflowversneller van Svea blijf je zelf in control.
+                    Via
+                    <a href="#" target="_blank" rel="noopener">onze portal</a>
+                    kan je 24/7 de status volgen van jouw ingediende facturen en
+                    betalingen.
+                  </p>
+                  <p>
+                    Ook heb je hier de mogelijkheid om eenvoudig je facturen in
+                    te dienen of creditchecks aan te vragen voor nieuwe
+                    opdrachtgevers.
+                  </p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <script>
+      // FAQ Accordion Functionality with iframe height adjustment
+      function initFAQComponent() {
+        const faqButtons = document.querySelectorAll(".svea-faq-header-btn");
+
+        // Function to notify parent iframe about height changes
+        function notifyParentOfHeightChange() {
+          const height = document.body.scrollHeight;
+          if (window.parent && window.parent !== window) {
+            window.parent.postMessage(
+              {
+                type: "iframe-height",
+                height: height,
+              },
+              "*"
+            );
+          }
+        }
+
+        // Function to toggle FAQ accordion
+        function toggleFAQ(button) {
+          const faqId = button.getAttribute("data-faq");
+          const content = document.getElementById(`faq-content-${faqId}`);
+
+          // Toggle active class on button
+          button.classList.toggle("active");
+
+          // Toggle content visibility
+          if (button.classList.contains("active")) {
+            content.classList.add("show");
+            // Close other FAQs
+            faqButtons.forEach((otherButton) => {
+              if (
+                otherButton !== button &&
+                otherButton.classList.contains("active")
+              ) {
+                const otherFaqId = otherButton.getAttribute("data-faq");
+                const otherContent = document.getElementById(
+                  `faq-content-${otherFaqId}`
+                );
+                otherButton.classList.remove("active");
+                otherContent.classList.remove("show");
+              }
+            });
+          } else {
+            content.classList.remove("show");
+          }
+
+          // Notify parent about height change after animation
+          setTimeout(notifyParentOfHeightChange, 350);
+        }
+
+        // Add click event to each FAQ button
+        faqButtons.forEach((button) => {
+          button.addEventListener("click", () => toggleFAQ(button));
+        });
+
+        // Initial height notification
+        setTimeout(notifyParentOfHeightChange, 100);
+      }
+
+      // Initialize when DOM is loaded
+      document.addEventListener("DOMContentLoaded", initFAQComponent);
+
+      // Handle window resize
+      window.addEventListener("resize", function () {
+        setTimeout(function () {
+          const height = document.body.scrollHeight;
+          if (window.parent && window.parent !== window) {
+            window.parent.postMessage(
+              {
+                type: "iframe-height",
+                height: height,
+              },
+              "*"
+            );
+          }
+        }, 100);
+      });
+    </script>
+  </body>
+</html>
