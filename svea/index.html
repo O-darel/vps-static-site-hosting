@@ -9306,5 +9306,18 @@
         }
       });
     </script>
+
+    <script>
+      // Listen for height updates from FAQ iframe
+      window.addEventListener("message", function (event) {
+        const iframe = document.getElementById("faq");
+        // Verify message is from our FAQ iframe
+        if (iframe && iframe.contentWindow === event.source) {
+          if (event.data.type === "iframe-height") {
+            iframe.style.height = event.data.height + "px";
+          }
+        }
+      });
+    </script>
   </body>
 </html>

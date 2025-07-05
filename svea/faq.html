@@ -4,6 +4,8 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Simple FAQ Component</title>
+    <link rel="stylesheet" href="./style.css" />
+
     <style>
       /* Reset and base styles */
       * {
@@ -31,7 +33,7 @@
         --primary-hover: #003d82;
         --text: #333;
         --text-light: #4a5568;
-        --border: #e2e8f0;
+        --border: #302f2f;
         --transition: all 0.3s ease;
 
         background: white;
@@ -45,7 +47,7 @@
       }
 
       .svea-faq-container {
-        max-width: 1200px;
+        max-width: 1100px;
         margin: 0 auto;
         padding: 0;
         height: auto !important;
@@ -54,7 +56,8 @@
 
       .svea-faq-header {
         text-align: center;
-        margin-bottom: 50px;
+        margin-bottom: 40px;
+        margin-top: 30px;
       }
 
       .svea-faq-title {
@@ -88,8 +91,8 @@
         height: auto !important;
         min-height: auto !important;
         border-bottom: 1px solid var(--border);
-        padding-bottom: 20px;
-        margin-bottom: 30px;
+        padding-bottom: 5px;
+        margin-bottom: 20px;
       }
 
       .svea-faq-accordion:hover {
@@ -112,7 +115,7 @@
         border: none;
         font-size: 18px;
         line-height: 1.4;
-        margin-bottom: 15px;
+        margin-bottom: 5px;
       }
 
       .svea-faq-header-btn:hover {
@@ -183,8 +186,8 @@
       }
 
       .svea-faq-content a {
-        color: var(--primary-color);
-        text-decoration: none;
+        color: #00699a;
+        text-decoration: underline;
         font-weight: 500;
         transition: color 0.2s;
       }
@@ -211,10 +214,22 @@
     </style>
   </head>
   <body>
+    <div
+      id="svea-faq-loading"
+      style="
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background: white;
+        z-index: 1000;
+      "
+    ></div>
     <div class="svea-faq-component">
       <div class="svea-faq-container">
         <div class="svea-faq-header">
-          <h2 class="svea-faq-title">Direct antwoord op jouw vragen</h2>
+          <h2 class="">Direct antwoord op jouw vragen</h2>
         </div>
 
         <div class="svea-faq-grid">
@@ -222,7 +237,7 @@
           <div>
             <div class="svea-faq-accordion">
               <button class="svea-faq-header-btn" data-faq="1">
-                <span>Wat is factoring?</span>
+                <span style="color: #00325c">Wat is factoring?</span>
                 <div class="svea-faq-icon">
                   <svg width="20" height="20" viewBox="0 0 24 24">
                     <path
@@ -276,7 +291,9 @@
 
             <div class="svea-faq-accordion">
               <button class="svea-faq-header-btn" data-faq="2">
-                <span>Hoe lever ik mijn facturen aan bij Svea?</span>
+                <span style="color: #00325c"
+                  >Hoe lever ik mijn facturen aan bij Svea?</span
+                >
                 <div class="svea-faq-icon">
                   <svg width="20" height="20" viewBox="0 0 24 24">
                     <path
@@ -305,7 +322,9 @@
 
             <div class="svea-faq-accordion">
               <button class="svea-faq-header-btn" data-faq="3">
-                <span>Welke gegevens moet ik aanleveren?</span>
+                <span style="color: #00325c"
+                  >Welke gegevens moet ik aanleveren?</span
+                >
                 <div class="svea-faq-icon">
                   <svg width="20" height="20" viewBox="0 0 24 24">
                     <path
@@ -342,7 +361,7 @@
           <div>
             <div class="svea-faq-accordion">
               <button class="svea-faq-header-btn" data-faq="4">
-                <span>Wat kost factoring?</span>
+                <span style="color: #00325c">Wat kost factoring?</span>
                 <div class="svea-faq-icon">
                   <svg width="20" height="20" viewBox="0 0 24 24">
                     <path
@@ -377,7 +396,9 @@
 
             <div class="svea-faq-accordion">
               <button class="svea-faq-header-btn" data-faq="5">
-                <span>Hoe weet ik of mijn opdrachtgever voldoet?</span>
+                <span style="color: #00325c"
+                  >Hoe weet ik of mijn opdrachtgever voldoet?</span
+                >
                 <div class="svea-faq-icon">
                   <svg width="20" height="20" viewBox="0 0 24 24">
                     <path
@@ -407,7 +428,9 @@
 
             <div class="svea-faq-accordion">
               <button class="svea-faq-header-btn" data-faq="6">
-                <span>Hoe kan ik volgen wat er gebeurt met mijn facturen?</span>
+                <span style="color: #00325c"
+                  >Hoe kan ik volgen wat er gebeurt met mijn facturen?</span
+                >
                 <div class="svea-faq-icon">
                   <svg width="20" height="20" viewBox="0 0 24 24">
                     <path
@@ -440,6 +463,75 @@
     </div>
 
     <script>
+      // MODIFIED INITIALIZATION
+      function initFAQComponent() {
+        const faqButtons = document.querySelectorAll(".svea-faq-header-btn");
+        const loadingOverlay = document.getElementById("svea-faq-loading");
+
+        function notifyParentOfHeightChange() {
+          const height = document.body.scrollHeight;
+          window.parent.postMessage(
+            { type: "iframe-height", height: height },
+            "*"
+          );
+        }
+
+        function toggleFAQ(button) {
+          // ... existing toggle logic ...
+          const faqId = button.getAttribute("data-faq");
+          const content = document.getElementById(`faq-content-${faqId}`);
+
+          // Toggle active class on button
+          button.classList.toggle("active");
+
+          // Toggle content visibility
+          if (button.classList.contains("active")) {
+            content.classList.add("show");
+            // Close other FAQs
+            faqButtons.forEach((otherButton) => {
+              if (
+                otherButton !== button &&
+                otherButton.classList.contains("active")
+              ) {
+                const otherFaqId = otherButton.getAttribute("data-faq");
+                const otherContent = document.getElementById(
+                  `faq-content-${otherFaqId}`
+                );
+                otherButton.classList.remove("active");
+                otherContent.classList.remove("show");
+              }
+            });
+          } else {
+            content.classList.remove("show");
+          }
+          notifyParentOfHeightChange();
+        }
+
+        // Initialize accordions
+        faqButtons.forEach((button) => {
+          button.addEventListener("click", () => toggleFAQ(button));
+        });
+
+        // INITIAL HEIGHT NOTIFICATION
+        setTimeout(() => {
+          notifyParentOfHeightChange();
+          // Hide loading overlay after content renders
+          loadingOverlay.style.display = "none";
+        }, 100);
+      }
+
+      // Start with hidden content to prevent scroll flash
+      document.body.style.visibility = "hidden";
+      document.addEventListener("DOMContentLoaded", function () {
+        initFAQComponent();
+        // Make content visible after init
+        setTimeout(() => {
+          document.body.style.visibility = "visible";
+        }, 50);
+      });
+    </script>
+
+    <!-- <script>
       // FAQ Accordion Functionality with iframe height adjustment
       function initFAQComponent() {
         const faqButtons = document.querySelectorAll(".svea-faq-header-btn");
@@ -518,6 +610,6 @@
           }
         }, 100);
       });
-    </script>
+    </script> -->
   </body>
 </html>
